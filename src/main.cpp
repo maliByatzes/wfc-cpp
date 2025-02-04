@@ -1,10 +1,25 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/VideoMode.hpp>
 #include <vector>
+
+void displayTiles(sf::RenderWindow& window, std::vector<sf::Sprite>& tiles) {
+    float posx = 0, posy = 0;
+    for (auto tile : tiles) {
+        if (posx == 800) {
+            posx = 0;
+            posy += 32;
+        }            
+        
+        tile.setPosition({posx, posy});
+        window.draw(tile);
+        posx += 32;
+    }    
+}
 
 int main()
 {
@@ -35,14 +50,7 @@ int main()
 
         window.clear();
 
-        tiles[0].setPosition({100, 0});
-        window.draw(tiles[0]);
-
-        tiles[4].setPosition({200, 0});
-        window.draw(tiles[4]);
-
-        tiles[9].setPosition({300, 0});
-        window.draw(tiles[9]);
+        displayTiles(window, tiles);
 
         window.display();
     }
