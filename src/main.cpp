@@ -12,13 +12,44 @@ void displayTiles(sf::RenderWindow& window, std::vector<sf::Sprite>& tiles) {
     for (auto tile : tiles) {
         if (posx == 800) {
             posx = 0;
-            posy += 32;
+            posy += 16;
         }            
         
         tile.setPosition({posx, posy});
         window.draw(tile);
-        posx += 32;
+        posx += 16;
     }    
+}
+
+std::vector<sf::Sprite> getDesiredTiles(const std::vector<sf::Sprite>& tiles) {
+    std::vector<sf::Sprite> desired_tiles{};
+
+/*
+    Tiles to use:
+    - grass => 2
+    - top-right edge lake => 279
+    - top-middle edge lake => 278
+    - top-left edge lake => 277
+    - left mid edge lake => 304
+    - mid water => 305
+    - right mid edge lake => 306
+    - bottom-left edge lake => 331
+    - bottom-mid edge lake => 332
+    - bottom-right edge lake => 333
+*/
+
+    desired_tiles.push_back(tiles[2]);
+    desired_tiles.push_back(tiles[277]);
+    desired_tiles.push_back(tiles[278]);
+    desired_tiles.push_back(tiles[279]);
+    desired_tiles.push_back(tiles[304]);
+    desired_tiles.push_back(tiles[305]);
+    desired_tiles.push_back(tiles[306]);
+    desired_tiles.push_back(tiles[331]);
+    desired_tiles.push_back(tiles[332]);
+    desired_tiles.push_back(tiles[333]);
+        
+    return desired_tiles;
 }
 
 int main()
@@ -28,8 +59,8 @@ int main()
 
     const sf::Texture spriteTexture("punyworld-overworld-tileset.png");
 
-    const int tileWidth = 32;
-    const int tileHeight = 32;
+    const int tileWidth = 16;
+    const int tileHeight = 16;
 
     std::vector<sf::Sprite> tiles;
 
@@ -41,6 +72,8 @@ int main()
         }
     }
 
+    std::vector<sf::Sprite> desired_tiles{ getDesiredTiles(tiles) };
+
     // Main loop
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {
@@ -50,7 +83,7 @@ int main()
 
         window.clear();
 
-        displayTiles(window, tiles);
+        displayTiles(window, desired_tiles);
 
         window.display();
     }
