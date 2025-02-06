@@ -27,7 +27,7 @@ namespace wfc
         void run();
 
         App() = default;
-        virtual ~App();
+        virtual ~App() = default;
     };
 };
 

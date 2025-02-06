@@ -36,7 +36,7 @@ namespace wfc
 
   std::vector<sf::Sprite> App::getTiles()
   {
-    const sf::Texture spriteTexture("punyworld-overworld-tileset.png");
+    static const sf::Texture spriteTexture("punyworld-overworld-tileset.png");
     std::vector<sf::Sprite> tiles{};
 
     for (int y = 0; y < spriteTexture.getSize().y; y += App::DEFAULT_HEIGHT)
