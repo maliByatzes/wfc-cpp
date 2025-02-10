@@ -1,6 +1,8 @@
 #include "app.h"
 #include <cassert>
+#include <cstddef>
 #include <iostream>
+#include <random>
 
 namespace wfc
 {
@@ -63,19 +65,26 @@ namespace wfc
   }
 
   void App::displayTiles()
-  {
+  { 
     // Temporary display solution
     float posx = 0, posy = 0;
-    for (auto tile : _tiles)
+    std::mt19937 mt{};
+    std::uniform_int_distribution<std::size_t> rng{0, _tiles.size()};
+
+    for (;;)
     {
+      std::size_t idx = rng(mt);
       if (posx == App::DEFAULT_WIDTH)
       {
         posx = 0;
         posy += App::DEFAULT_TILE_HEIGHT;  
       }
 
-      tile.setPosition({posx, posy});
-      _window->draw(tile);
+      if (posy == App::DEFAULT_HEIGHT)
+        break;
+
+      _tiles[idx].setPosition({posx, posy});
+      _window->draw(_tiles[idx]);
       posx += App::DEFAULT_TILE_HEIGHT;
     }
   }
