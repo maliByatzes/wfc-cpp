@@ -1,4 +1,6 @@
 #include "app.h"
+#include <cassert>
+#include <iostream>
 
 namespace wfc
 {
@@ -39,9 +41,9 @@ namespace wfc
     static const sf::Texture spriteTexture("punyworld-overworld-tileset.png");
     std::vector<sf::Sprite> tiles{};
 
-    for (int y = 0; y < spriteTexture.getSize().y; y += App::DEFAULT_HEIGHT)
+    for (int y = 0; y < spriteTexture.getSize().y; y += App::DEFAULT_TILE_HEIGHT)
     {
-      for (int x = 0; x < spriteTexture.getSize().x; x += App::DEFAULT_WIDTH)
+      for (int x = 0; x < spriteTexture.getSize().x; x += App::DEFAULT_TILE_WIDTH)
       {
         sf::Sprite tile(spriteTexture);
         tile.setTextureRect(
@@ -66,7 +68,7 @@ namespace wfc
     float posx = 0, posy = 0;
     for (auto tile : _tiles)
     {
-      if (posx == App::DEFAULT_TILE_WIDTH)
+      if (posx == App::DEFAULT_WIDTH)
       {
         posx = 0;
         posy += App::DEFAULT_TILE_HEIGHT;  
@@ -94,6 +96,9 @@ namespace wfc
  * - bottom-mid edge lake => 332
  * - bottom-right edge lake => 333
 **/
+
+    assert(tiles.size() >= 10);
+    
     _tiles.push_back(tiles[2]);
     _tiles.push_back(tiles[277]);
     _tiles.push_back(tiles[278]);
