@@ -1,8 +1,7 @@
 #include "app.h"
-#include <cassert>
-#include <cstddef>
 #include <iostream>
-#include <random>
+#include <string>
+#include <utility>
 
 namespace wfc
 {
@@ -68,8 +67,9 @@ namespace wfc
   { 
     // Temporary display solution
     float posx = 0, posy = 0;
-    std::mt19937 mt{};
-    std::uniform_int_distribution<std::size_t> rng{0, _tiles.size()};
+    std::mt19937 mt{ /* std::random_device{}() */ };
+    std::uniform_int_distribution<std::size_t> rng{0, _tiles.size() - 1};
+    const sf::Font font("IosevkaTermNerdFont-Medium.ttf");
 
     for (;;)
     {
@@ -83,8 +83,10 @@ namespace wfc
       if (posy == App::DEFAULT_HEIGHT)
         break;
 
-      _tiles[idx].setPosition({posx, posy});
-      _window->draw(_tiles[idx]);
+      sf::Text entropy_text(font, std::to_string(_tiles[idx].first), 12);
+      entropy_text.setPosition({posx, posy});
+      // _tiles[idx].second.setPosition({posx, posy});
+      _window->draw(entropy_text);
       posx += App::DEFAULT_TILE_HEIGHT;
     }
   }
@@ -108,16 +110,16 @@ namespace wfc
 
     assert(tiles.size() >= 10);
     
-    _tiles.push_back(tiles[2]);
-    _tiles.push_back(tiles[277]);
-    _tiles.push_back(tiles[278]);
-    _tiles.push_back(tiles[279]);
-    _tiles.push_back(tiles[304]);
-    _tiles.push_back(tiles[305]);
-    _tiles.push_back(tiles[306]);
-    _tiles.push_back(tiles[331]);
-    _tiles.push_back(tiles[332]);
-    _tiles.push_back(tiles[333]);
+    _tiles.push_back(std::make_pair(9, tiles[2]));
+    _tiles.push_back(std::make_pair(9, tiles[277]));
+    _tiles.push_back(std::make_pair(9, tiles[278]));
+    _tiles.push_back(std::make_pair(9, tiles[279]));
+    _tiles.push_back(std::make_pair(9, tiles[304]));
+    _tiles.push_back(std::make_pair(9, tiles[305]));
+    _tiles.push_back(std::make_pair(9, tiles[306]));
+    _tiles.push_back(std::make_pair(9, tiles[331]));
+    _tiles.push_back(std::make_pair(9, tiles[332]));
+    _tiles.push_back(std::make_pair(9, tiles[333]));
   }
 
 };

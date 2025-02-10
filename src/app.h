@@ -3,6 +3,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <utility>
+#include <cassert>
+#include <cstddef>
+#include <random>
 
 namespace wfc
 {
@@ -10,8 +13,8 @@ namespace wfc
     {
     private:
         sf::RenderWindow *_window = nullptr;
-        std::vector<sf::Sprite> _tiles; 
-        std::vector<std::pair<int, sf::Sprite>> _grid;
+        std::vector<std::pair<int, sf::Sprite>> _tiles; 
+        // std::vector<std::pair<int, sf::Sprite>> _grid;
 
         std::vector<sf::Sprite> getTiles();
         void displayTiles();
