@@ -1,4 +1,6 @@
 #include "app.h"
+#include <cstdio>
+#include <iostream>
 
 namespace wfc
 {
@@ -6,12 +8,41 @@ namespace wfc
   const unsigned int App::DEFAULT_HEIGHT = 320;
   const unsigned int App::DEFAULT_TILE_WIDTH = 16;
   const unsigned int App::DEFAULT_TILE_HEIGHT = 16;
+  const unsigned int App::COLUMNS = DEFAULT_WIDTH / DEFAULT_TILE_WIDTH;
+  const unsigned int App::ROWS = DEFAULT_HEIGHT / DEFAULT_TILE_HEIGHT;
 
   void App::setWindow(sf::RenderWindow *w)
   {
     _window = w;
   }
 
+  void App::setGrid()
+  {
+    _grid.resize(COLUMNS * ROWS);
+
+    for (std::size_t j = 0; j < ROWS; j++)
+    {
+      for (std::size_t i = 0; i < COLUMNS; i++)
+      {
+        sf::RectangleShape rect({10.f, 10.f});
+        rect.setFillColor(sf::Color::Magenta);
+        _grid[i+j*COLUMNS] = rect;
+      }
+    }
+  }
+  
+  void App::drawGrid()
+  {
+    for (std::size_t j = 0; j < ROWS; j++)
+    {
+      for (std::size_t i = 0; i < COLUMNS; i++)
+      {
+        _grid[i+j*COLUMNS].setPosition({static_cast<float>(i), static_cast<float>(j)});
+        _window->draw(_grid[i+j*COLUMNS]);
+      }
+    }
+  }
+  
   sf::RenderWindow* App::getWindow()
   {
     return _window;
@@ -29,7 +60,7 @@ namespace wfc
       }
 
       _window->clear();
-      displayTiles();
+      drawGrid();
       _window->display();
     }
   }
@@ -61,10 +92,11 @@ namespace wfc
   }
 
   void App::displayTiles()
-  { 
+  {
+    /*
     // Temporary display solution
     float posx = 0, posy = 0;
-    std::mt19937 mt{ /* std::random_device{}() */ };
+    std::mt19937 mt{ std::random_device{}() };
     std::uniform_int_distribution<std::size_t> rng{0, _tiles.size() - 1};
     const sf::Font font("IosevkaTermNerdFont-Medium.ttf");
 
@@ -85,7 +117,7 @@ namespace wfc
       // _tiles[idx].second.setPosition({posx, posy});
       _window->draw(entropy_text);
       posx += App::DEFAULT_TILE_HEIGHT;
-    }
+    }*/
   }
   
   void App::setDesiredTiles()
