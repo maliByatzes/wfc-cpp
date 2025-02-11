@@ -1,7 +1,4 @@
 #include "app.h"
-#include <iostream>
-#include <string>
-#include <utility>
 
 namespace wfc
 {
@@ -46,17 +43,17 @@ namespace wfc
     {
       for (int x = 0; x < spriteTexture.getSize().x; x += App::DEFAULT_TILE_WIDTH)
       {
-        sf::Sprite tile(spriteTexture);
-        tile.setTextureRect(
+        sf::Sprite st(spriteTexture);
+        st.setTextureRect(
           sf::IntRect(
             {x, y},
             {
               App::DEFAULT_TILE_WIDTH,
-              App::DEFAULT_TILE_WIDTH
+              App::DEFAULT_TILE_HEIGHT
             }
           )
         );
-        tiles.push_back(tile);
+        tiles.push_back(st);
       } 
     }
 
@@ -83,7 +80,7 @@ namespace wfc
       if (posy == App::DEFAULT_HEIGHT)
         break;
 
-      sf::Text entropy_text(font, std::to_string(_tiles[idx].first), 12);
+      sf::Text entropy_text(font, std::to_string(_tiles[idx].entropy_value), 14);
       entropy_text.setPosition({posx, posy});
       // _tiles[idx].second.setPosition({posx, posy});
       _window->draw(entropy_text);
@@ -110,16 +107,16 @@ namespace wfc
 
     assert(tiles.size() >= 10);
     
-    _tiles.push_back(std::make_pair(9, tiles[2]));
-    _tiles.push_back(std::make_pair(9, tiles[277]));
-    _tiles.push_back(std::make_pair(9, tiles[278]));
-    _tiles.push_back(std::make_pair(9, tiles[279]));
-    _tiles.push_back(std::make_pair(9, tiles[304]));
-    _tiles.push_back(std::make_pair(9, tiles[305]));
-    _tiles.push_back(std::make_pair(9, tiles[306]));
-    _tiles.push_back(std::make_pair(9, tiles[331]));
-    _tiles.push_back(std::make_pair(9, tiles[332]));
-    _tiles.push_back(std::make_pair(9, tiles[333]));
+    _tiles.push_back(Tile{ .name = "grass", .entropy_value = 9, .sprite = &tiles[2] });
+    _tiles.push_back(Tile{ .name = "top_left_edge_lake", .entropy_value = 9, .sprite = &tiles[277] });
+    _tiles.push_back(Tile{ .name = "top_middle_edge_lake", .entropy_value = 9, .sprite = &tiles[278] });
+    _tiles.push_back(Tile{ .name = "top_right_edge_lake", .entropy_value = 9, .sprite = &tiles[279] });
+    _tiles.push_back(Tile{ .name = "left_mid_edge_lake", .entropy_value = 9, .sprite = &tiles[304] });
+    _tiles.push_back(Tile{ .name = "mid_water", .entropy_value = 9, .sprite = &tiles[305] });
+    _tiles.push_back(Tile{ .name = "right_mid_edge_lake", .entropy_value = 9, .sprite = &tiles[306] });
+    _tiles.push_back(Tile{ .name = "bottom_left_edge_lake", .entropy_value = 9, .sprite = &tiles[331] });
+    _tiles.push_back(Tile{ .name = "bottom_mid_edge_lake", .entropy_value = 9, .sprite = &tiles[332] });
+    _tiles.push_back(Tile{ .name = "bottom_right_edge_lake", .entropy_value = 9, .sprite = &tiles[333] });
   }
 
 };

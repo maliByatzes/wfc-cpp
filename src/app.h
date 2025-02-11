@@ -9,12 +9,17 @@
 
 namespace wfc
 {
+    struct Tile {
+        std::string name;
+        int entropy_value;
+        sf::Sprite *sprite;
+    };
+    
     class App
     {
     private:
         sf::RenderWindow *_window = nullptr;
-        std::vector<std::pair<int, sf::Sprite>> _tiles; 
-        // std::vector<std::pair<int, sf::Sprite>> _grid;
+        std::vector<Tile> _tiles; 
 
         std::vector<sf::Sprite> getTiles();
         void displayTiles();
