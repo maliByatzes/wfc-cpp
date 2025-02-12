@@ -1,6 +1,4 @@
 #include "app.h"
-#include <cstdio>
-#include <iostream>
 
 namespace wfc
 {
@@ -28,7 +26,8 @@ namespace wfc
         rect.setFillColor(sf::Color::Black);
         rect.setOutlineColor(sf::Color::White);
         rect.setOutlineThickness(1.f);
-        _grid[i+j*COLUMNS] = rect;
+        _grid[i+j*COLUMNS].rect = rect;
+        _grid[i+j*COLUMNS].entropy_value = 9; // Hard code for now
       }
     }
   }
@@ -39,12 +38,12 @@ namespace wfc
     {
       for (std::size_t i = 0; i < COLUMNS; i++)
       {
-        _grid[i+j*COLUMNS].setPosition(
+        _grid[i+j*COLUMNS].rect.setPosition(
           {
             static_cast<float>(i * DEFAULT_TILE_WIDTH),
             static_cast<float>(j * DEFAULT_TILE_HEIGHT)
           });
-        _window->draw(_grid[i+j*COLUMNS]);
+        _window->draw(_grid[i+j*COLUMNS].rect);
       }
     }
   }

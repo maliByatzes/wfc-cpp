@@ -16,6 +16,11 @@ namespace wfc
         sf::Sprite *sprite;
     };
 
+    struct Box {
+        int entropy_value;
+        sf::RectangleShape rect;
+    };
+
     // Rule set on what can appear on each direction of the certain tile
     // [NORTH, EAST, SOUTH, WEST]
     inline std::unordered_map<std::string, std::vector<std::string>> ruleSet =
@@ -36,7 +41,7 @@ namespace wfc
     {
     private:
         sf::RenderWindow *_window = nullptr;
-        std::vector<sf::RectangleShape> _grid;
+        std::vector<Box> _grid;
         std::vector<Tile> _tiles; 
 
         std::vector<sf::Sprite> getTiles();
