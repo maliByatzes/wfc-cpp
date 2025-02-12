@@ -15,6 +15,7 @@ int main()
 
     App app{};
     app.setWindow(&window);
+    app.loadTileset();
     app.setDesiredTiles();
     app.setGrid();
 

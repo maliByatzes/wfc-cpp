@@ -1,4 +1,5 @@
 #include "app.h"
+#include <stdexcept>
 
 namespace wfc
 {
@@ -22,8 +23,12 @@ namespace wfc
     {
       for (std::size_t i = 0; i < COLUMNS; i++)
       {
-        sf::RectangleShape rect({static_cast<float>(DEFAULT_TILE_HEIGHT), static_cast<float>(DEFAULT_TILE_WIDTH)});
-        rect.setFillColor(sf::Color::Black);
+        sf::RectangleShape rect(
+        {
+          static_cast<float>(DEFAULT_TILE_HEIGHT),
+          static_cast<float>(DEFAULT_TILE_WIDTH)
+        });
+        // rect.setFillColor(sf::Color::Black);
         rect.setOutlineColor(sf::Color::White);
         rect.setOutlineThickness(1.f);
         _grid[i+j*COLUMNS].rect = rect;
@@ -34,10 +39,15 @@ namespace wfc
   
   void App::drawGrid()
   {
+    std::mt19937 mt{ /* std::random_device{}() */ };
+    std::uniform_int_distribution<std::size_t> rng{0, _desiredTiles.size() - 1};
+
     for (std::size_t j = 0; j < ROWS; j++)
     {
       for (std::size_t i = 0; i < COLUMNS; i++)
       {
+
+        _grid[i+j*COLUMNS].rect.setTexture(&_desiredTiles[0].sprite.getTexture());
         _grid[i+j*COLUMNS].rect.setPosition(
           {
             static_cast<float>(i * DEFAULT_TILE_WIDTH),
@@ -70,64 +80,31 @@ namespace wfc
     }
   }
 
-  std::vector<sf::Sprite> App::getTiles()
+  void App::loadTileset()
   {
-    static const sf::Texture spriteTexture("punyworld-overworld-tileset.png");
-    std::vector<sf::Sprite> tiles{};
-
-    for (int y = 0; y < spriteTexture.getSize().y; y += App::DEFAULT_TILE_HEIGHT)
+    if (!_tilesetTexture.loadFromFile("punyworld-overworld-tileset.png"))
     {
-      for (int x = 0; x < spriteTexture.getSize().x; x += App::DEFAULT_TILE_WIDTH)
-      {
-        sf::Sprite st(spriteTexture);
-        st.setTextureRect(
-          sf::IntRect(
-            {x, y},
-            {
-              App::DEFAULT_TILE_WIDTH,
-              App::DEFAULT_TILE_HEIGHT
-            }
-          )
-        );
-        tiles.push_back(st);
-      } 
+      throw std::runtime_error("Failed to load tileset texture.");
     }
 
-    return tiles;
-  }
-
-  void App::displayTiles()
-  {
-    /*
-    // Temporary display solution
-    float posx = 0, posy = 0;
-    std::mt19937 mt{ std::random_device{}() };
-    std::uniform_int_distribution<std::size_t> rng{0, _tiles.size() - 1};
-    const sf::Font font("IosevkaTermNerdFont-Medium.ttf");
-
-    for (;;)
+    for (int y = 0; y < _tilesetTexture.getSize().y; y += DEFAULT_TILE_HEIGHT)
     {
-      std::size_t idx = rng(mt);
-      if (posx == App::DEFAULT_WIDTH)
+      for (int x = 0; x < _tilesetTexture.getSize().x; x += DEFAULT_TILE_WIDTH)
       {
-        posx = 0;
-        posy += App::DEFAULT_TILE_HEIGHT;  
+        sf::Sprite sprite(_tilesetTexture);
+        sprite.setTextureRect(
+          sf::IntRect(
+            {x, y},
+            {DEFAULT_TILE_WIDTH, DEFAULT_TILE_HEIGHT}
+          )
+        );
+        _tiles.push_back(sprite);
       }
-
-      if (posy == App::DEFAULT_HEIGHT)
-        break;
-
-      sf::Text entropy_text(font, std::to_string(_tiles[idx].entropy_value), 14);
-      entropy_text.setPosition({posx, posy});
-      // _tiles[idx].second.setPosition({posx, posy});
-      _window->draw(entropy_text);
-      posx += App::DEFAULT_TILE_HEIGHT;
-    }*/
+    }
   }
-  
+    
   void App::setDesiredTiles()
   {
-    std::vector<sf::Sprite> tiles{ App::getTiles() };
 /**
  *Tiles to use:
  * - grass => 2
@@ -142,18 +119,18 @@ namespace wfc
  * - bottom-right edge lake => 333
 **/
 
-    assert(tiles.size() >= 10);
+    assert(_tiles.size() >= 10);
     
-    _tiles.push_back(Tile{ .name = "grass", .entropy_value = 9, .sprite = &tiles[2] });
-    _tiles.push_back(Tile{ .name = "top_left_edge_lake", .entropy_value = 9, .sprite = &tiles[277] });
-    _tiles.push_back(Tile{ .name = "top_middle_edge_lake", .entropy_value = 9, .sprite = &tiles[278] });
-    _tiles.push_back(Tile{ .name = "top_right_edge_lake", .entropy_value = 9, .sprite = &tiles[279] });
-    _tiles.push_back(Tile{ .name = "left_mid_edge_lake", .entropy_value = 9, .sprite = &tiles[304] });
-    _tiles.push_back(Tile{ .name = "mid_water", .entropy_value = 9, .sprite = &tiles[305] });
-    _tiles.push_back(Tile{ .name = "right_mid_edge_lake", .entropy_value = 9, .sprite = &tiles[306] });
-    _tiles.push_back(Tile{ .name = "bottom_left_edge_lake", .entropy_value = 9, .sprite = &tiles[331] });
-    _tiles.push_back(Tile{ .name = "bottom_mid_edge_lake", .entropy_value = 9, .sprite = &tiles[332] });
-    _tiles.push_back(Tile{ .name = "bottom_right_edge_lake", .entropy_value = 9, .sprite = &tiles[333] });
+    _desiredTiles.push_back(Tile{ .name = "grass", .sprite = _tiles[2] });
+    _desiredTiles.push_back(Tile{ .name = "top_left_edge_lake", .sprite = _tiles[277] });
+    _desiredTiles.push_back(Tile{ .name = "top_middle_edge_lake", .sprite = _tiles[278] });
+    _desiredTiles.push_back(Tile{ .name = "top_right_edge_lake", .sprite = _tiles[279] });
+    _desiredTiles.push_back(Tile{ .name = "left_mid_edge_lake", .sprite = _tiles[304] });
+    _desiredTiles.push_back(Tile{ .name = "mid_water", .sprite = _tiles[305] });
+    _desiredTiles.push_back(Tile{ .name = "right_mid_edge_lake", .sprite = _tiles[306] });
+    _desiredTiles.push_back(Tile{ .name = "bottom_left_edge_lake", .sprite = _tiles[331] });
+    _desiredTiles.push_back(Tile{ .name = "bottom_mid_edge_lake", .sprite = _tiles[332] });
+    _desiredTiles.push_back(Tile{ .name = "bottom_right_edge_lake", .sprite = _tiles[333] });
   }
 
 };

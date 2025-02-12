@@ -12,8 +12,7 @@ namespace wfc
 {
     struct Tile {
         std::string name;
-        int entropy_value;
-        sf::Sprite *sprite;
+        sf::Sprite sprite;
     };
 
     struct Box {
@@ -42,10 +41,9 @@ namespace wfc
     private:
         sf::RenderWindow *_window = nullptr;
         std::vector<Box> _grid;
-        std::vector<Tile> _tiles; 
-
-        std::vector<sf::Sprite> getTiles();
-        void displayTiles();
+        std::vector<Tile> _desiredTiles;
+        std::vector<sf::Sprite> _tiles;
+        sf::Texture _tilesetTexture;
 
     public:
         static const unsigned int DEFAULT_WIDTH;
@@ -54,15 +52,14 @@ namespace wfc
         static const unsigned int DEFAULT_TILE_HEIGHT;
         static const unsigned int COLUMNS;
         static const unsigned int ROWS;
+
         void setWindow(sf::RenderWindow *);
         sf::RenderWindow* getWindow();
         void setGrid();
         void drawGrid();
+        void loadTileset();
         void setDesiredTiles();
         void run();
-
-        App() = default;
-        virtual ~App() = default;
     };
 };
 
