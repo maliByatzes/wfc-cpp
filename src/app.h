@@ -59,6 +59,7 @@ namespace wfc
         void drawGrid();
         void loadTileset();
         void setDesiredTiles();
+        void displayTiles();
         void run();
     };
 };

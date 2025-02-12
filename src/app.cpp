@@ -75,7 +75,8 @@ namespace wfc
       }
 
       _window->clear();
-      drawGrid();
+      // drawGrid();
+      displayTiles();
       _window->display();
     }
   }
@@ -133,4 +134,28 @@ namespace wfc
     _desiredTiles.push_back(Tile{ .name = "bottom_right_edge_lake", .sprite = _tiles[333] });
   }
 
+  void App::displayTiles()
+  {
+    float posx = 0.f, posy = 0.f;
+    std::mt19937 mt{ /* std::random_device{}() */ };
+    std::uniform_int_distribution<std::size_t> rng{0, _desiredTiles.size() - 1};
+
+    for (;;)
+    {
+      std::size_t idx = rng(mt);
+      if (posx == DEFAULT_WIDTH)
+      {
+        posx = 0;
+        posy += DEFAULT_TILE_HEIGHT;
+      }
+
+      if (posy == DEFAULT_HEIGHT)
+        break;
+
+      _desiredTiles[idx].sprite.setPosition({posx, posy});
+      _window->draw(_desiredTiles[idx].sprite);
+
+      posx += DEFAULT_TILE_HEIGHT;
+    }
+  }
 };
