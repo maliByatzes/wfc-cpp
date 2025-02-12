@@ -24,8 +24,10 @@ namespace wfc
     {
       for (std::size_t i = 0; i < COLUMNS; i++)
       {
-        sf::RectangleShape rect({10.f, 10.f});
-        rect.setFillColor(sf::Color::Magenta);
+        sf::RectangleShape rect({static_cast<float>(DEFAULT_TILE_HEIGHT), static_cast<float>(DEFAULT_TILE_WIDTH)});
+        rect.setFillColor(sf::Color::Black);
+        rect.setOutlineColor(sf::Color::White);
+        rect.setOutlineThickness(1.f);
         _grid[i+j*COLUMNS] = rect;
       }
     }
@@ -37,7 +39,11 @@ namespace wfc
     {
       for (std::size_t i = 0; i < COLUMNS; i++)
       {
-        _grid[i+j*COLUMNS].setPosition({static_cast<float>(i), static_cast<float>(j)});
+        _grid[i+j*COLUMNS].setPosition(
+          {
+            static_cast<float>(i * DEFAULT_TILE_WIDTH),
+            static_cast<float>(j * DEFAULT_TILE_HEIGHT)
+          });
         _window->draw(_grid[i+j*COLUMNS]);
       }
     }
